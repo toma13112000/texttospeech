@@ -1,0 +1,127 @@
+import tkinter as tk
+from tkinter import *
+from tkinter import messagebox
+import save as save
+from ttkthemes import themed_tk
+from tkinter import ttk
+from tkinter.messagebox import showinfo
+import tkinter.scrolledtext as st
+import playsound
+import random
+from gtts import gTTS
+import os
+
+root = tk.Tk()
+root.resizable(0, 0)
+root.title("")
+root.geometry("330x170")
+root.configure(background="ghostwhite")
+
+def ru_win():
+    a = themed_tk.ThemedTk()
+    a.get_themes()
+    a.set_theme("radiance")
+    a.resizable(1, 1)
+    a.title("Говорящий текст")
+
+    def speak():
+        audio_string = text.get(1.0, END)
+        tts = gTTS(text=audio_string, lang='ru')
+        r = random.randint(1, 1000000)
+        audio_file = 'audio-' + str(r) + '.mp3'
+        tts.save(audio_file)
+        playsound.playsound(audio_file)
+        os.remove(audio_file)
+
+    def save():
+        audio_string = text.get(1.0, END)
+        tts = gTTS(text=audio_string, lang='ru')
+        r = random.randint(1, 1000000)
+        audio_file = 'audio-' + str(r) + '.mp3'
+        tts.save(audio_file)
+        showinfo("python says ", "аудио сохранено как  " + str(audio_file))
+
+    text = st.ScrolledText(a, width=50, heigh=15, wrap=WORD, padx=15, borderwidth=5, relief=RIDGE)
+    text.pack()
+
+    listen_btn = ttk.Button(a, text="Слушать", width=15, command=speak,).pack(side="left")
+    clear_btn = ttk.Button(a, text="Отчистить", width=15, command=lambda: text.delete(1.0, END))
+    clear_btn.pack(side="left")
+    save_button = ttk.Button(a, text="Сохранить", width=15, command=save).pack(side="left")
+
+def en_win():
+    a = themed_tk.ThemedTk()
+    a.get_themes()
+    a.set_theme("radiance")
+    a.resizable(0, 0)
+    a.configure(background="white")
+    a.title("Talking Text")
+
+    def speak():
+        audio_string = text.get(1.0, END)
+        tts = gTTS(text=audio_string, lang='en')
+        r = random.randint(1, 1000000)
+        audio_file = 'audio-' + str(r) + '.mp3'
+        tts.save(audio_file)
+        playsound.playsound(audio_file)
+        os.remove(audio_file)
+
+    def save():
+        audio_string = text.get(1.0, END)
+        tts = gTTS(text=audio_string, lang='en')
+        r = random.randint(1, 1000000)
+        audio_file = 'audio-' + str(r) + '.mp3'
+        tts.save(audio_file)
+        showinfo("python says ", "audio is saved as " + str(audio_file))
+
+    text = st.ScrolledText(a, width=50, heigh=15, wrap=WORD, padx=15, borderwidth=5, relief=RIDGE)
+    text.pack()
+    listen_btn = ttk.Button(a, text="Listen", width=17, command=speak).pack(side="left")
+    clear_btn = ttk.Button(a, text="Clear", width=17, command=lambda: text.delete(1.0, END))
+    clear_btn.pack(side="left")
+    save_button = ttk.Button(a, text="Save", width=17, command=save).pack(side="left")
+
+
+def open_new_win():
+    win = Tk()
+    win.resizable(0,0)
+    win.configure(background="white")
+    win.title("")
+    quit_btn = tk.Button(win, text="Вернуться назад", bg="lavender", font="Times_New_Roman 9", command=win.destroy, height=2, width=20).grid(row=2, column=2)
+    open_btn = tk.Button(win, text="Открыть программу", bg="lavender", font="Times_New_Roman 9", command=ru_win, height=2, width=20).grid(row=2, column=1)
+
+def open_new_win2():
+    win = Tk()
+    win.resizable(0,0)
+    win.configure(background="white")
+    win.title("")
+    quit_btn = tk.Button(win, text="Back", bg="lavender", font="Times_New_Roman 9", command=win.destroy, height=2, width=15).grid(row=2, column=2)
+    open_btn = tk.Button(win, text="Open", bg="lavender", font="Times_New_Roman 9", command=en_win, height=2, width=15).grid(row=2, column=1)
+
+def on_closing():
+    if messagebox.askokcancel("Quit.Выход.", "Do you want to quit? Вы действительно хотите выйти из программы?"):
+        root.destroy()
+
+def start():
+    window = Tk()
+    window.geometry("300x100")
+    window.configure(background="ghostwhite")
+    window.resizable(0,0)
+    window.title("Language")
+
+    label = tk.Label(window, text="Choose language-Выберите Язык", bg='white', font="Times_New_Roman 12", fg="red", height=2)
+    label.pack(fill="both",  side="top",  expand=True, padx=0, pady=0)
+
+    ru_button = tk.Button(window, text="Russian-Русский", bg="lavender", font="Times_New_Roman 9", command=open_new_win, height=2, width=17)
+    ru_button.pack(side="right", padx=10, pady=10)
+    en_button = tk.Button(window, text="English-Английский", bg="lavender", font="Times_New_Roman 9", command=open_new_win2, height=2, width=17)
+    en_button.pack(side="left", padx=10, pady=10)
+
+intro = "Hello, I am talking text, convert written text \nto speech. Ckick 'Start' to start. \nClick 'Exit' to exit.\nПривет, я Говорящий текст, конвертирую \nнапечатанный текст в аудио. \nНажмите 'Старт', чтобы начать.\nНажмите 'Выход', чтобы выйти из программы."
+lab = tk.Label(root, text=intro, bg="ghostwhite", fg="darkblue", font="Times_New_Roman 11", justify=LEFT).pack()
+
+btn1 = tk.Button(root, text="Start-Старт", bg="lavender", font="Times_New_Roman 11", command=start, height=2, width=18).pack(side="left")
+btn2 = tk.Button(root, text="Exit-Выход", bg="lavender", font="Times_New_Roman 11", command=on_closing, height=2, width=18).pack(side="left")
+
+root.protocol("WM_DELETE_WINDOW", on_closing)
+root.mainloop()
